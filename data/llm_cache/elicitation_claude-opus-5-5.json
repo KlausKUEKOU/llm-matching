@@ -1,0 +1,151 @@
+{
+ "model": "claude-opus-5-5",
+ "task": "preference_elicitation",
+ "note": "Responses produced by Claude Opus 5.5 reading each letter with the prompt in src/prompts.py, cached so the pipeline runs without an API key.",
+ "rankings": {
+  "S01": [
+   "ECO_DS",
+   "QFIN",
+   "DEV",
+   "AIDS"
+  ],
+  "S02": [
+   "QFIN",
+   "ECO_DS",
+   "DEV",
+   "AIDS"
+  ],
+  "S03": [
+   "ECO_DS",
+   "DEV",
+   "AIDS",
+   "QFIN"
+  ],
+  "S04": [
+   "ECO_DS",
+   "DEV",
+   "AIDS",
+   "QFIN"
+  ],
+  "S05": [
+   "AIDS",
+   "DEV",
+   "QFIN",
+   "ECO_DS"
+  ],
+  "S06": [
+   "QFIN",
+   "DEV",
+   "AIDS",
+   "ECO_DS"
+  ],
+  "S07": [
+   "QFIN",
+   "DEV",
+   "ECO_DS",
+   "AIDS"
+  ],
+  "S08": [
+   "ECO_DS",
+   "DEV",
+   "AIDS",
+   "QFIN"
+  ],
+  "S09": [
+   "AIDS",
+   "DEV",
+   "ECO_DS",
+   "QFIN"
+  ],
+  "S10": [
+   "AIDS",
+   "DEV",
+   "ECO_DS",
+   "QFIN"
+  ],
+  "S11": [
+   "ECO_DS",
+   "DEV",
+   "QFIN",
+   "AIDS"
+  ],
+  "S12": [
+   "AIDS",
+   "DEV",
+   "QFIN",
+   "ECO_DS"
+  ],
+  "S13": [
+   "AIDS",
+   "DEV",
+   "ECO_DS",
+   "QFIN"
+  ],
+  "S14": [
+   "AIDS",
+   "QFIN",
+   "ECO_DS",
+   "DEV"
+  ],
+  "S15": [
+   "DEV",
+   "AIDS",
+   "QFIN",
+   "ECO_DS"
+  ],
+  "S16": [
+   "AIDS",
+   "DEV",
+   "QFIN",
+   "ECO_DS"
+  ],
+  "S17": [
+   "DEV",
+   "QFIN",
+   "AIDS",
+   "ECO_DS"
+  ],
+  "S18": [
+   "ECO_DS",
+   "DEV",
+   "AIDS",
+   "QFIN"
+  ],
+  "S19": [
+   "ECO_DS",
+   "AIDS",
+   "DEV",
+   "QFIN"
+  ],
+  "S20": [
+   "DEV",
+   "QFIN",
+   "AIDS",
+   "ECO_DS"
+  ],
+  "S21": [
+   "QFIN",
+   "DEV",
+   "AIDS",
+   "ECO_DS"
+  ],
+  "S22": [
+   "QFIN",
+   "AIDS",
+   "DEV",
+   "ECO_DS"
+  ],
+  "S23": [
+   "DEV",
+   "QFIN",
+   "ECO_DS",
+   "AIDS"
+  ],
+  "S24": [
+   "AIDS",
+   "QFIN",
+   "DEV",
+   "ECO_DS"
+  ]
+ }
+}

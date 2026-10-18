@@ -1,0 +1,266 @@
+[
+ {
+  "id": "S01",
+  "letter": "After a licence in economics at Université Félix Houphouët-Boigny, I worked for one year. I want to spend my career finding out what really causes what in messy administrative datasets. Heavy programming and abstract algorithms are not where I see myself. Markets interest me somewhat, mainly as a way to understand savings. My bachelor thesis estimated the returns to schooling with instrumental variables, and I loved every step of cleaning the census microdata.",
+  "grades": {
+   "mathematics": 10.8,
+   "statistics": 13.1,
+   "econometrics": 15.9,
+   "economics": 11.9,
+   "programming": 11.6
+  }
+ },
+ {
+  "id": "S02",
+  "letter": "After a licence in economics at Université Félix Houphouët-Boigny, I worked for one year. Heavy programming and abstract algorithms are not where I see myself. Regression analysis is a useful tool and I would not mind deepening it. My internship at a brokerage firm in Abidjan convinced me that volatility is the most fascinating object in economics. I have been pricing options on a spreadsheet since my second year and I follow the BRVM every day.",
+  "grades": {
+   "mathematics": 12.9,
+   "statistics": 14.5,
+   "econometrics": 10.0,
+   "economics": 12.0,
+   "programming": 8.8
+  }
+ },
+ {
+  "id": "S03",
+  "letter": "I completed my undergraduate studies in statistics at ISSEA. My bachelor thesis estimated the returns to schooling with instrumental variables, and I loved every step of cleaning the census microdata. Public policy questions in Africa matter to me, even if they are not my main focus. I want to spend my career finding out what really causes what in messy administrative datasets. I find algorithms elegant, although I am not a strong coder yet. I am not attracted by the world of finance and trading floors.",
+  "grades": {
+   "mathematics": 13.3,
+   "statistics": 12.6,
+   "econometrics": 8.0,
+   "economics": 11.8,
+   "programming": 12.9
+  }
+ },
+ {
+  "id": "S04",
+  "letter": "I graduated in applied mathematics and economics from the University of Dschang. My bachelor thesis estimated the returns to schooling with instrumental variables, and I loved every step of cleaning the census microdata. Public policy questions in Africa matter to me, even if they are not my main focus. During my internship at the national statistics institute I built a gradient-boosting model to impute missing household incomes. I am not attracted by the world of finance and trading floors.",
+  "grades": {
+   "mathematics": 11.2,
+   "statistics": 15.3,
+   "econometrics": 11.2,
+   "economics": 12.9,
+   "programming": 14.9
+  }
+ },
+ {
+  "id": "S05",
+  "letter": "I hold a bachelor's degree in economics from the University of Yaoundé II. Markets interest me somewhat, mainly as a way to understand savings. Spending months cleaning survey files is honestly not what I am looking for. Public policy questions in Africa matter to me, even if they are not my main focus. I would like to build recommendation and allocation algorithms that are both efficient and fair. I spend my evenings on competitive programming and I recently coded a small chess engine.",
+  "grades": {
+   "mathematics": 13.2,
+   "statistics": 16.0,
+   "econometrics": 9.6,
+   "economics": 14.9,
+   "programming": 13.3
+  }
+ },
+ {
+  "id": "S06",
+  "letter": "I studied economics and management at the University of Douala. Growing up in a farming village, I saw how a small loan changed my mother's cassava business. My internship at a brokerage firm in Abidjan convinced me that volatility is the most fascinating object in economics. Spending months cleaning survey files is honestly not what I am looking for. I have been pricing options on a spreadsheet since my second year and I follow the BRVM every day.",
+  "grades": {
+   "mathematics": 13.2,
+   "statistics": 14.3,
+   "econometrics": 12.6,
+   "economics": 14.5,
+   "programming": 12.9
+  }
+ },
+ {
+  "id": "S07",
+  "letter": "I studied economics and management at the University of Douala. My internship at a brokerage firm in Abidjan convinced me that volatility is the most fascinating object in economics. Heavy programming and abstract algorithms are not where I see myself. I volunteered for a year with an NGO measuring the impact of school meals in northern Cameroon. Regression analysis is a useful tool and I would not mind deepening it. I have been pricing options on a spreadsheet since my second year and I follow the BRVM every day.",
+  "grades": {
+   "mathematics": 13.3,
+   "statistics": 10.4,
+   "econometrics": 11.7,
+   "economics": 12.6,
+   "programming": 15.0
+  }
+ },
+ {
+  "id": "S08",
+  "letter": "After a licence in economics at Université Félix Houphouët-Boigny, I worked for one year. I want to design and evaluate programmes that reduce rural poverty, ideally with randomised trials. I find algorithms elegant, although I am not a strong coder yet. I want to spend my career finding out what really causes what in messy administrative datasets. I am not attracted by the world of finance and trading floors. During my internship at the national statistics institute I built a gradient-boosting model to impute missing household incomes.",
+  "grades": {
+   "mathematics": 8.6,
+   "statistics": 12.0,
+   "econometrics": 12.8,
+   "economics": 15.8,
+   "programming": 14.5
+  }
+ },
+ {
+  "id": "S09",
+  "letter": "I studied economics and management at the University of Douala. I would like to build recommendation and allocation algorithms that are both efficient and fair. Voting rules and fair division problems are what got me into economics in the first place. I am not attracted by the world of finance and trading floors. Public policy questions in Africa matter to me, even if they are not my main focus.",
+  "grades": {
+   "mathematics": 12.3,
+   "statistics": 13.8,
+   "econometrics": 12.7,
+   "economics": 12.6,
+   "programming": 10.5
+  }
+ },
+ {
+  "id": "S10",
+  "letter": "I hold a bachelor's degree in economics from the University of Yaoundé II. I would like to build recommendation and allocation algorithms that are both efficient and fair. Growing up in a farming village, I saw how a small loan changed my mother's cassava business. I am not attracted by the world of finance and trading floors. Voting rules and fair division problems are what got me into economics in the first place.",
+  "grades": {
+   "mathematics": 12.9,
+   "statistics": 14.5,
+   "econometrics": 12.3,
+   "economics": 15.3,
+   "programming": 13.0
+  }
+ },
+ {
+  "id": "S11",
+  "letter": "I hold a bachelor's degree in economics from the University of Yaoundé II. During my internship at the national statistics institute I built a gradient-boosting model to impute missing household incomes. Heavy programming and abstract algorithms are not where I see myself. My bachelor thesis estimated the returns to schooling with instrumental variables, and I loved every step of cleaning the census microdata. Public policy questions in Africa matter to me, even if they are not my main focus.",
+  "grades": {
+   "mathematics": 12.3,
+   "statistics": 11.0,
+   "econometrics": 13.4,
+   "economics": 17.9,
+   "programming": 11.2
+  }
+ },
+ {
+  "id": "S12",
+  "letter": "I studied economics and management at the University of Douala. Markets interest me somewhat, mainly as a way to understand savings. Spending months cleaning survey files is honestly not what I am looking for. I would like to build recommendation and allocation algorithms that are both efficient and fair. Public policy questions in Africa matter to me, even if they are not my main focus. Voting rules and fair division problems are what got me into economics in the first place.",
+  "grades": {
+   "mathematics": 12.5,
+   "statistics": 14.5,
+   "econometrics": 14.1,
+   "economics": 10.7,
+   "programming": 12.8
+  }
+ },
+ {
+  "id": "S13",
+  "letter": "I hold a bachelor's degree in economics from the University of Yaoundé II. I would like to build recommendation and allocation algorithms that are both efficient and fair. Public policy questions in Africa matter to me, even if they are not my main focus. Voting rules and fair division problems are what got me into economics in the first place. I am not attracted by the world of finance and trading floors.",
+  "grades": {
+   "mathematics": 13.4,
+   "statistics": 13.2,
+   "econometrics": 11.7,
+   "economics": 12.7,
+   "programming": 8.6
+  }
+ },
+ {
+  "id": "S14",
+  "letter": "After a licence in economics at Université Félix Houphouët-Boigny, I worked for one year. Markets interest me somewhat, mainly as a way to understand savings. Regression analysis is a useful tool and I would not mind deepening it. Voting rules and fair division problems are what got me into economics in the first place. I spend my evenings on competitive programming and I recently coded a small chess engine. I prefer theoretical or market questions to fieldwork and policy evaluation.",
+  "grades": {
+   "mathematics": 9.2,
+   "statistics": 14.7,
+   "econometrics": 11.1,
+   "economics": 14.7,
+   "programming": 13.3
+  }
+ },
+ {
+  "id": "S15",
+  "letter": "I graduated in applied mathematics and economics from the University of Dschang. Growing up in a farming village, I saw how a small loan changed my mother's cassava business. I would like to build recommendation and allocation algorithms that are both efficient and fair. I want to design and evaluate programmes that reduce rural poverty, ideally with randomised trials. Spending months cleaning survey files is honestly not what I am looking for. Markets interest me somewhat, mainly as a way to understand savings.",
+  "grades": {
+   "mathematics": 12.6,
+   "statistics": 10.9,
+   "econometrics": 15.4,
+   "economics": 11.8,
+   "programming": 12.9
+  }
+ },
+ {
+  "id": "S16",
+  "letter": "I completed my undergraduate studies in statistics at ISSEA. Voting rules and fair division problems are what got me into economics in the first place. I would like to build recommendation and allocation algorithms that are both efficient and fair. Public policy questions in Africa matter to me, even if they are not my main focus. Spending months cleaning survey files is honestly not what I am looking for.",
+  "grades": {
+   "mathematics": 12.7,
+   "statistics": 15.1,
+   "econometrics": 13.0,
+   "economics": 11.5,
+   "programming": 12.3
+  }
+ },
+ {
+  "id": "S17",
+  "letter": "I completed my undergraduate studies in statistics at ISSEA. Spending months cleaning survey files is honestly not what I am looking for. Markets interest me somewhat, mainly as a way to understand savings. I want to design and evaluate programmes that reduce rural poverty, ideally with randomised trials. I volunteered for a year with an NGO measuring the impact of school meals in northern Cameroon.",
+  "grades": {
+   "mathematics": 11.2,
+   "statistics": 16.6,
+   "econometrics": 11.5,
+   "economics": 10.7,
+   "programming": 13.7
+  }
+ },
+ {
+  "id": "S18",
+  "letter": "I graduated in applied mathematics and economics from the University of Dschang. My bachelor thesis estimated the returns to schooling with instrumental variables, and I loved every step of cleaning the census microdata. Public policy questions in Africa matter to me, even if they are not my main focus. I find algorithms elegant, although I am not a strong coder yet. During my internship at the national statistics institute I built a gradient-boosting model to impute missing household incomes. I am not attracted by the world of finance and trading floors.",
+  "grades": {
+   "mathematics": 9.1,
+   "statistics": 14.6,
+   "econometrics": 12.9,
+   "economics": 13.2,
+   "programming": 11.3
+  }
+ },
+ {
+  "id": "S19",
+  "letter": "I hold a bachelor's degree in economics from the University of Yaoundé II. I want to spend my career finding out what really causes what in messy administrative datasets. I am not attracted by the world of finance and trading floors. My bachelor thesis estimated the returns to schooling with instrumental variables, and I loved every step of cleaning the census microdata. I find algorithms elegant, although I am not a strong coder yet.",
+  "grades": {
+   "mathematics": 15.9,
+   "statistics": 11.9,
+   "econometrics": 13.6,
+   "economics": 12.9,
+   "programming": 12.0
+  }
+ },
+ {
+  "id": "S20",
+  "letter": "I completed my undergraduate studies in statistics at ISSEA. Spending months cleaning survey files is honestly not what I am looking for. I want to design and evaluate programmes that reduce rural poverty, ideally with randomised trials. My dream job is on a trading desk or in the risk department of a large bank. I find algorithms elegant, although I am not a strong coder yet. I volunteered for a year with an NGO measuring the impact of school meals in northern Cameroon.",
+  "grades": {
+   "mathematics": 13.0,
+   "statistics": 15.6,
+   "econometrics": 14.5,
+   "economics": 13.8,
+   "programming": 11.8
+  }
+ },
+ {
+  "id": "S21",
+  "letter": "I hold a bachelor's degree in economics from the University of Yaoundé II. My internship at a brokerage firm in Abidjan convinced me that volatility is the most fascinating object in economics. Spending months cleaning survey files is honestly not what I am looking for. I find algorithms elegant, although I am not a strong coder yet. Growing up in a farming village, I saw how a small loan changed my mother's cassava business. I have been pricing options on a spreadsheet since my second year and I follow the BRVM every day.",
+  "grades": {
+   "mathematics": 14.7,
+   "statistics": 14.8,
+   "econometrics": 15.0,
+   "economics": 12.0,
+   "programming": 16.3
+  }
+ },
+ {
+  "id": "S22",
+  "letter": "I hold a bachelor's degree in economics from the University of Yaoundé II. My internship at a brokerage firm in Abidjan convinced me that volatility is the most fascinating object in economics. Spending months cleaning survey files is honestly not what I am looking for. Public policy questions in Africa matter to me, even if they are not my main focus. I have been pricing options on a spreadsheet since my second year and I follow the BRVM every day. I would like to build recommendation and allocation algorithms that are both efficient and fair.",
+  "grades": {
+   "mathematics": 17.1,
+   "statistics": 16.3,
+   "econometrics": 10.5,
+   "economics": 9.3,
+   "programming": 14.8
+  }
+ },
+ {
+  "id": "S23",
+  "letter": "I studied economics and management at the University of Douala. I want to design and evaluate programmes that reduce rural poverty, ideally with randomised trials. Growing up in a farming village, I saw how a small loan changed my mother's cassava business. Heavy programming and abstract algorithms are not where I see myself. Markets interest me somewhat, mainly as a way to understand savings.",
+  "grades": {
+   "mathematics": 13.6,
+   "statistics": 13.1,
+   "econometrics": 12.5,
+   "economics": 13.1,
+   "programming": 11.1
+  }
+ },
+ {
+  "id": "S24",
+  "letter": "I completed my undergraduate studies in statistics at ISSEA. I spend my evenings on competitive programming and I recently coded a small chess engine. Markets interest me somewhat, mainly as a way to understand savings. I would like to build recommendation and allocation algorithms that are both efficient and fair. Spending months cleaning survey files is honestly not what I am looking for.",
+  "grades": {
+   "mathematics": 14.1,
+   "statistics": 12.9,
+   "econometrics": 13.9,
+   "economics": 10.8,
+   "programming": 11.6
+  }
+ }
+]

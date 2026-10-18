@@ -1,0 +1,39 @@
+{
+ "model": "claude-opus-5-5",
+ "task": "direct_assignment",
+ "note": "One-shot assignment produced by Claude Opus 5.5 from letters, grades and capacities with the prompt in src/prompts.py, without running any algorithm.",
+ "assignment": {
+  "ECO_DS": [
+   "S01",
+   "S04",
+   "S08",
+   "S11",
+   "S18",
+   "S19"
+  ],
+  "QFIN": [
+   "S02",
+   "S06",
+   "S07",
+   "S14",
+   "S21",
+   "S22"
+  ],
+  "DEV": [
+   "S03",
+   "S13",
+   "S15",
+   "S17",
+   "S20",
+   "S23"
+  ],
+  "AIDS": [
+   "S05",
+   "S09",
+   "S10",
+   "S12",
+   "S16",
+   "S24"
+  ]
+ }
+}

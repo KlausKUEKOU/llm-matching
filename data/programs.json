@@ -1,0 +1,42 @@
+{
+ "ECO_DS": {
+  "name": "Econometrics & Data Science",
+  "capacity": 6,
+  "description": "Causal inference, panel data, machine learning for economic data, large surveys.",
+  "grade_weights": {
+   "econometrics": 0.5,
+   "statistics": 0.3,
+   "programming": 0.2
+  }
+ },
+ "QFIN": {
+  "name": "Quantitative Finance",
+  "capacity": 6,
+  "description": "Asset pricing, derivatives, risk management, financial time series, trading.",
+  "grade_weights": {
+   "mathematics": 0.5,
+   "statistics": 0.3,
+   "economics": 0.2
+  }
+ },
+ "DEV": {
+  "name": "Development Economics",
+  "capacity": 6,
+  "description": "Poverty, agriculture, public policy evaluation, field experiments in Africa.",
+  "grade_weights": {
+   "economics": 0.5,
+   "econometrics": 0.3,
+   "statistics": 0.2
+  }
+ },
+ "AIDS": {
+  "name": "AI & Decision Science",
+  "capacity": 6,
+  "description": "Optimisation, game theory, social choice, reinforcement learning, algorithms.",
+  "grade_weights": {
+   "mathematics": 0.4,
+   "programming": 0.4,
+   "statistics": 0.2
+  }
+ }
+}

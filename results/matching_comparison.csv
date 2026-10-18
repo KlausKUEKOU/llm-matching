@@ -1,0 +1,5 @@
+Method,Feasible,Unassigned,Got true 1st choice,Mean true rank of assignment,Total utility,Blocking pairs (true prefs),Students in a blocking pair,Students worse off than oracle
+Oracle DA (true preferences),True,0,0.833,1.208,29.678,0,0,0
+LLM elicitation + DA,True,0,0.833,1.208,29.678,0,0,0
+Keyword elicitation + DA,True,0,0.292,2.458,4.453,15,12,16
+LLM direct assignment,True,0,0.875,1.125,33.984,1,1,0
