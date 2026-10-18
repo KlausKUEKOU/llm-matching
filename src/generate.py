@@ -1,10 +1,10 @@
-"""Synthetic school-choice market with known ground truth.
+# Marché synthétique d'admission en Master, avec une vérité connue.
+#
+# Chaque étudiant a des utilités cachées pour les 4 programmes. Sa lettre de motivation
+# est fabriquée à partir de ces utilités, avec des indices indirects (stages, cours aimés,
+# projets de carrière) : le nom des programmes n'apparaît jamais.
+# Les programmes classent les étudiants selon une moyenne pondérée des notes utiles.
 
-Each student has latent utilities over the Master programs. Her application letter is generated
-from those utilities with *indirect* cues (courses enjoyed, internships, career plans), so that
-recovering the ranking requires reading comprehension rather than keyword matching. Programs rank
-students by a weighted average of the grades that matter for them.
-"""
 import json
 import random
 from pathlib import Path
@@ -27,8 +27,7 @@ PROGRAMS = {
 }
 SUBJECTS = ["mathematics", "statistics", "econometrics", "economics", "programming"]
 
-# Indirect cues: each signals one program without naming it. Strong cues are typical of a first
-# choice; weak cues of a moderate interest; "aversion" cues of a last choice.
+# Indices forts : typiques du 1er choix. Indices faibles : intérêt modéré. Rejet : dernier choix.
 STRONG = {
     "ECO_DS": ["My bachelor thesis estimated the returns to schooling with instrumental variables, and I loved "
                "every step of cleaning the census microdata.",
@@ -65,35 +64,106 @@ OPENERS = ["I hold a bachelor's degree in economics from the University of Yaoun
            "I studied economics and management at the University of Douala."]
 
 
+def rank_programs(codes, utilities):
+    """Renvoie les codes triés de l'utilité la plus haute à la plus basse (tri par sélection)."""
+    remaining = list(range(len(codes)))
+    order = []
+    while len(remaining) > 0:
+        best = remaining[0]
+        for k in remaining:
+            if utilities[k] > utilities[best]:
+                best = k
+        order.append(best)
+        remaining.remove(best)
+    return order
+
+
+# ------------------------------------------------------------------------------
+# ALGORITHME FabriquerMarche
+# POUR chaque étudiant FAIRE
+#     tirer 4 utilités au hasard (loi normale), bonus de 1,5 à un programme tiré au sort
+#     classement_vrai <- programmes triés par utilité décroissante
+#     tirer 5 notes entre 8 et 20
+#     lettre <- phrase d'ouverture
+#              + 2 indices forts du 1er choix
+#              + 1 indice fort du 2e choix si son utilité > 0,6, sinon 1 indice faible
+#              + 1 indice faible du 3e choix (une fois sur deux)
+#              + 1 phrase de rejet du dernier choix
+#     mélanger les phrases (l'ordre ne trahit pas le classement)
+# FIN POUR
+# ------------------------------------------------------------------------------
 def make_market(n_students=24, seed=7):
     rng = np.random.default_rng(seed)
     pyrand = random.Random(seed)
     codes = list(PROGRAMS)
     students = []
+
     for s in range(n_students):
         util = rng.normal(0, 1, len(codes))
-        util[rng.integers(len(codes))] += 1.5           # most students have a clear favourite
-        order = [codes[k] for k in np.argsort(-util)]
-        grades = {sub: float(np.clip(rng.normal(13, 2.2), 8, 19)) for sub in SUBJECTS}
-        sentences = [pyrand.choice(OPENERS)]
-        sentences += pyrand.sample(STRONG[order[0]], 2)
-        sentences.append(pyrand.choice(STRONG[order[1]]) if util[np.argsort(-util)[1]] > 0.6 else WEAK[order[1]])
-        sentences.append(WEAK[order[2]] if pyrand.random() < 0.5 else "")
-        sentences.append(AVERSE[order[3]])
-        body = [x for x in sentences[1:] if x]
-        pyrand.shuffle(body)                          # cue order says nothing about preference order
-        letter = " ".join([sentences[0]] + body)
-        students.append({"id": f"S{s + 1:02d}", "letter": letter, "grades": {k: round(v, 1) for k, v in grades.items()},
-                         "true_ranking": order, "utilities": dict(zip(codes, np.round(util, 3).tolist()))})
+        favourite = rng.integers(len(codes))
+        util[favourite] = util[favourite] + 1.5
+
+        order_idx = rank_programs(codes, util)
+        order = []
+        for k in order_idx:
+            order.append(codes[k])
+
+        grades = {}
+        for subject in SUBJECTS:
+            g = rng.normal(13, 2.2)
+            if g < 8:
+                g = 8
+            if g > 19:
+                g = 19
+            grades[subject] = float(g)
+
+        opener = pyrand.choice(OPENERS)
+        body = pyrand.sample(STRONG[order[0]], 2)
+        if util[order_idx[1]] > 0.6:
+            body.append(pyrand.choice(STRONG[order[1]]))
+        else:
+            body.append(WEAK[order[1]])
+        if pyrand.random() < 0.5:
+            body.append(WEAK[order[2]])
+        body.append(AVERSE[order[3]])
+        pyrand.shuffle(body)
+
+        letter = opener
+        for sentence in body:
+            letter = letter + " " + sentence
+
+        rounded_grades = {}
+        utilities = {}
+        for subject in grades:
+            rounded_grades[subject] = round(grades[subject], 1)
+        for k in range(len(codes)):
+            utilities[codes[k]] = round(float(util[k]), 3)
+
+        students.append({"id": "S%02d" % (s + 1), "letter": letter, "grades": rounded_grades,
+                         "true_ranking": order, "utilities": utilities})
     return students
 
 
+# ------------------------------------------------------------------------------
+# ALGORITHME PrioritesDesProgrammes
+# POUR chaque programme p FAIRE
+#     POUR chaque étudiant s : score[s] <- somme des (poids x note) des matières utiles à p
+#     priorites[p] <- étudiants triés par score décroissant (égalité : ordre des identifiants)
+# ------------------------------------------------------------------------------
 def program_priorities(students):
-    """Each program ranks students by its weighted grade average (ties broken by id)."""
     prio = {}
-    for code, p in PROGRAMS.items():
-        score = {s["id"]: sum(w * s["grades"][sub] for sub, w in p["grade_weights"].items()) for s in students}
-        prio[code] = sorted(score, key=lambda sid: (-score[sid], sid))
+    for code in PROGRAMS:
+        weights = PROGRAMS[code]["grade_weights"]
+        scored = []
+        for s in students:
+            score = 0
+            for subject in weights:
+                score = score + weights[subject] * s["grades"][subject]
+            scored.append((-score, s["id"]))            # signe moins : tri décroissant
+        scored.sort()
+        prio[code] = []
+        for pair in scored:
+            prio[code].append(pair[1])
     return prio
 
 
@@ -101,11 +171,16 @@ if __name__ == "__main__":
     root = Path(__file__).resolve().parents[1]
     students = make_market()
     (root / "data").mkdir(exist_ok=True)
+
     with open(root / "data/students_ground_truth.json", "w") as f:
         json.dump(students, f, indent=1, ensure_ascii=False)
-    public = [{"id": s["id"], "letter": s["letter"], "grades": s["grades"]} for s in students]
+
+    public = []
+    for s in students:
+        public.append({"id": s["id"], "letter": s["letter"], "grades": s["grades"]})
     with open(root / "data/applications.json", "w") as f:
         json.dump(public, f, indent=1, ensure_ascii=False)
+
     with open(root / "data/programs.json", "w") as f:
         json.dump(PROGRAMS, f, indent=1, ensure_ascii=False)
-    print(f"wrote {len(students)} applications")
+    print("applications écrites :", len(students))

@@ -1,106 +1,127 @@
-# Solving Matching Problems with Large Language Models
+# Solving a Matching Problem with a Language Model
 
-Admissions, school choice and job assignment are **matching problems**: students have preferences
-over programmes, programmes rank students, seats are limited. Economics has a clean solution, the
-**deferred acceptance** algorithm (Gale and Shapley, 1962), which yields a *stable* matching: no
-student ever has justified envy. Its weak point is the input: real preferences are expressed in
-words (motivation letters), not in tidy rankings.
+Admissions to Master programmes are a matching problem: students have preferences over
+programmes, programmes rank students, and seats are limited. The deferred acceptance algorithm of
+Gale and Shapley (1962) gives a stable matching: no student can claim a seat that was given to
+someone with a lower priority. But the algorithm needs rankings, while real students write
+motivation letters.
 
-**Question:** how should a language model be used here?
+This project compares two ways of using a language model (LLM):
 
-- **A. LLM as preference elicitor:** it reads each letter, outputs a ranking, and deferred acceptance
-  does the matching.
-- **B. LLM as matchmaker:** it reads everything and outputs the assignment directly.
+- **A.** The LLM reads each letter and returns a ranking of the programmes. Deferred acceptance then
+  computes the matching.
+- **B.** The LLM reads all the letters and grades and returns the assignment directly.
 
-## Design
+## Data
 
-A synthetic but realistic market with **known ground truth** (`src/generate.py`):
+The market is synthetic so that the true preferences are known (`src/generate.py`):
 
-- 24 students, 4 Master programmes (Econometrics & Data Science, Quantitative Finance, Development
+- 24 students, 4 programmes (Econometrics & Data Science, Quantitative Finance, Development
   Economics, AI & Decision Science), 6 seats each.
-- Each student has latent utilities. Her letter reveals them only through **indirect cues**:
-  "I follow the BRVM every day" signals finance, "my mother's cassava business" development,
-  "I coded a chess engine" AI. Programmes are never named and cue order is shuffled.
-- Programmes rank students by a weighted average of the grades that matter to them.
+- Each student has hidden utilities. The letter only gives indirect clues: "I follow the BRVM every
+  day" points to finance, "my mother's cassava business" to development, "I coded a chess engine"
+  to AI. Programme names never appear and the order of the sentences is random.
+- Each programme ranks students with a weighted average of the grades it cares about.
 
-Compared methods: oracle DA on true preferences, LLM elicitation + DA, TF-IDF keyword elicitation +
-DA, and LLM direct assignment. Every matching is scored against the **true** preferences.
+Four methods are compared with the true preferences: deferred acceptance on the true rankings
+(oracle), on the LLM rankings, on rankings from keyword matching (TF-IDF), and the direct LLM
+assignment.
+
+## Algorithm
+
+```
+DEFERRED ACCEPTANCE
+    every student is free ; every programme holds nobody
+    WHILE a free student s still has programmes to ask
+        p <- best programme that s has not asked yet
+        p temporarily holds s
+        IF p holds more students than its capacity THEN
+            p rejects its lowest-priority student, who becomes free again
+    END WHILE
+    RETURN the students held by each programme
+
+BLOCKING PAIR
+    (s, p) is a blocking pair if s prefers p to her assignment
+    and p has a free seat or holds a student with lower priority than s.
+    No blocking pair = stable matching.
+```
 
 ## Results
 
-### Elicitation: can the model read preferences from letters?
+### Reading preferences from the letters
 
-| Method | Top choice correct | Last choice correct | Full ranking exact | Kendall τ |
+| Method | Top choice correct | Last choice correct | Full ranking exact | Kendall tau |
 |---|---|---|---|---|
 | LLM (Claude) | 100% | 100% | 100% | 1.00 |
 | TF-IDF keywords | 33% | 13% | 4% | 0.10 |
 
-Keyword matching fails because the cues share almost no vocabulary with the programme descriptions;
-the language model reads the meaning. **Caveat:** the cached answers come from the same model that
-wrote the letter generator, so 100% is an upper bound. Run `--live` with another model (e.g. Qwen
-via Ollama) for an independent test.
+Keyword matching fails because the clues use different words from the programme descriptions. The
+LLM understands the meaning of the sentences.
 
-### Matching: who gets what, and is it stable?
+Important: the cached answers come from the same model that wrote the letter generator, so 100% is
+an upper bound. For an independent test, run `--live` with another model (for example Qwen with
+Ollama).
+
+### The matchings
 
 | Method | Got true 1st choice | Mean rank obtained | Total utility | Blocking pairs | Worse off than oracle |
 |---|---|---|---|---|---|
-| Oracle DA (true preferences) | 83% | 1.21 | 29.7 | **0** | 0 |
-| **LLM elicitation + DA** | 83% | 1.21 | 29.7 | **0** | 0 |
-| Keyword elicitation + DA | 29% | 2.46 | 4.5 | 15 | 16 |
-| LLM direct assignment | **88%** | **1.13** | **34.0** | **1** | 0 |
+| Oracle DA (true preferences) | 83% | 1.21 | 29.7 | 0 | 0 |
+| LLM rankings + DA | 83% | 1.21 | 29.7 | 0 | 0 |
+| Keyword rankings + DA | 29% | 2.46 | 4.5 | 15 | 16 |
+| LLM direct assignment | 88% | 1.13 | 34.0 | 1 | 0 |
 
 ![Comparison](figures/matching_comparison.png)
 
-- **LLM + DA reproduces the oracle exactly**: stable, and the best stable outcome for students.
-- **The LLM matchmaker produces higher welfare but an unstable matching.** It moved S09 into
-  AI & Decision Science (her first choice) and S03 into Development (her second) instead of
-  following priorities. But S14 also wanted AI & Decision Science and has **higher priority** than
-  S09: S14 has justified envy and could contest the decision. This is the classic
-  efficiency-versus-stability trade-off, made silently by the model without telling anyone which
-  rule it applied.
-- With bad elicitation (keywords), DA is still "stable" for the rankings it receives, but 15 blocking
-  pairs appear with respect to the true preferences and two thirds of students are worse off.
+- LLM rankings + DA give exactly the oracle matching: stable, and the best stable matching for the
+  students.
+- The direct LLM assignment gives more first choices but is not stable. It put S09 in AI & Decision
+  Science (her first choice) and S03 in Development (her second choice). S14 also wanted AI &
+  Decision Science and has a higher priority than S09, so S14 could contest the decision. The model
+  traded stability for total satisfaction without saying which rule it followed.
+- With keyword rankings, DA is stable for the rankings it receives, but there are 15 blocking pairs
+  with respect to the true preferences, and 16 students out of 24 are worse off.
 
-### How fast does quality decay with elicitation errors?
+### Effect of reading errors
 
-Monte Carlo (300 draws per point): true rankings are perturbed by swapping adjacent programmes with
-probability *p*, then matched with DA.
+Simulation: the true rankings are perturbed by swapping two neighbouring programmes with
+probability p, then DA is run again (300 draws for each p).
 
 ![Noise](figures/elicitation_noise.png)
 
-Every 5 points of swap probability add about one blocking pair; at a 20% error rate, only 70% of
-students get their first choice (83% without errors) and four blocking pairs appear. **Elicitation
-accuracy is the binding constraint**, not the algorithm.
+Each additional 5 points of error probability add about one blocking pair. With 20% of errors, 71%
+of students get their first choice (83% without errors) and there are about 4 blocking pairs. The
+quality of the matching depends mostly on the quality of the reading step.
 
-## Takeaways
+## Conclusion
 
-1. Use the LLM for what it is good at, **understanding text**, and keep a mechanism with proven
-   properties (stability, strategy-proofness) for the allocation.
-2. A direct LLM allocation can look better on average but breaks priorities in ways that are hard to
-   audit and to justify to the students who lose.
-3. The quality of the elicitation step decides the quality of the matching: it must be validated
-   (here against ground truth; in practice by asking students to confirm the extracted ranking).
+- Use the LLM to read the texts, and keep an algorithm with known properties (stability,
+  strategy-proofness) to allocate the seats.
+- A direct LLM allocation can look better on average but it breaks priorities in a way that is
+  hard to check and to explain to the students who lose.
+- The rankings extracted by the LLM should be checked, for example by asking each student to
+  confirm them.
 
 ## Run it
 
 ```bash
 pip install -r requirements.txt
-python -m src.generate          # regenerate the market (seeded)
-python run_experiment.py        # uses cached LLM answers, no API key needed
+python -m src.generate          # rebuild the market (fixed seed)
+python run_experiment.py        # uses the cached LLM answers, no API key needed
 
-# live run with any model
+# with a live model
 export LLM_PROVIDER=anthropic LLM_MODEL=claude-opus-5-5 ANTHROPIC_API_KEY=...
 # or: export LLM_PROVIDER=openai OPENAI_BASE_URL=http://localhost:11434/v1 LLM_MODEL=qwen3:8b
 python run_experiment.py --live
 ```
 
 ```
-src/generate.py      synthetic market: utilities, letters with indirect cues, grades, priorities
-src/matching.py      deferred acceptance, blocking pairs, feasibility
-src/prompts.py       elicitation and direct-assignment prompts
-src/llm.py           Anthropic or OpenAI-compatible client
+src/generate.py      synthetic market: utilities, letters, grades, priorities
+src/matching.py      deferred acceptance, blocking pairs, feasibility check
+src/prompts.py       prompts sent to the model
+src/llm.py           client for Anthropic or any OpenAI-compatible server
 data/llm_cache/      cached model answers (Claude Opus 5.5)
 results/, figures/   outputs
 ```
 
-**Author:** Klaus KUEKOU
+Author: Klaus KUEKOU
