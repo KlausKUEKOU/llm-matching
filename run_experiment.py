@@ -53,24 +53,31 @@ def mean(values):
     return sum(values) / len(values)
 
 
-# ------------------------------------------------------------------ 1. données
-truth = read_json(ROOT / "data/students_ground_truth.json")
-apps = read_json(ROOT / "data/applications.json")
-codes = list(PROGRAMS)
+#  1. données
+truth = read_json(ROOT / "data/students_ground_truth.json") #préferences des étudiants
+apps = read_json(ROOT / "data/applications.json") # candidatures des apprenants
+codes = list(PROGRAMS) # code des programmes 
 
-capacities = {}
+capacities = {} # capacité d'accueil des programmmes
 for c in codes:
     capacities[c] = PROGRAMS[c]["capacity"]
 
 true_prefs = {}
 utilities = {}
 for s in truth:
-    true_prefs[s["id"]] = s["true_ranking"]
-    utilities[s["id"]] = s["utilities"]
+    true_prefs[s["id"]] = s["true_ranking"] # STockranking des prog par les étudiants
+    utilities[s["id"]] = s["utilities"] #utilité des étudiants
 students = list(true_prefs)
 priorities = program_priorities(truth)
 
-# ------------------------------------------------------------------ 2. réponses du LLM
+#  2. réponses du LLM
+
+#  il construit d’abord, pour chaque candidature, une question
+#  demandant au modèle de classer les programmes selon les préférences 
+# de l’étudiant (méthode A), puis une deuxième question qui lui donne 
+# la liste complète des candidats et des programmes afin qu’il propose directement une 
+# affectation finale (méthode B)
+
 if LIVE:
     from src.llm import complete, parse_json
     llm_prefs = {}
@@ -89,13 +96,21 @@ else:
     llm_direct = read_json(ROOT / "data/llm_cache/direct_assignment_claude-opus-5-5.json")["assignment"]
 
 
-# ------------------------------------------------------------------ 3. référence naïve : TF-IDF
+#  3. référence naïve : TF-IDF
 # ALGORITHME ClassementParMotsCles
 #   découper chaque texte en mots (minuscules, au moins 2 lettres, sans mots vides)
 #   idf[mot] <- ln((1 + N) / (1 + nb de textes contenant le mot)) + 1
 #   vecteur(texte)[mot] <- nb d'occurrences x idf[mot], puis normalisé à la longueur 1
 #   score(lettre, programme) <- produit scalaire des deux vecteurs (similarité cosinus)
 #   classement <- programmes triés par score décroissant
+
+# ce block nettoie le texte en retirant les mots courants sans intérêt,
+#  attribue plus de poids aux mots rares et caractéristiques grâce à TF-IDF,
+#  puis compare la lettre de chaque étudiant aux descriptions des programmes à 
+#  l’aide d’un score de similarité. Les programmes sont ensuite classés du plus 
+#  similaire au moins similaire à la lettre, ce qui donne une estimation simple des préférences 
+#  de l’étudiant. C’est utile car cela fournit
+#  une méthode de référence qui ne nécessite ni LLM ni compréhension fine du sens
 def tokenize(text):
     words = re.findall(r"(?u)\b\w\w+\b", text.lower())
     kept = []
@@ -161,10 +176,11 @@ for a in apps:
     kw_prefs[a["id"]] = ranking
 
 
-# ------------------------------------------------------------------ 4. qualité de la lecture des lettres
+#  4. qualité de la lecture des lettres
 # Tau de Kendall entre deux classements de 4 éléments :
 #   pour chaque paire de programmes, +1 si les deux classements sont d'accord, -1 sinon,
-#   puis on divise par le nombre de paires (6).
+#   puis on divise par le nombre de paires (6)
+
 def kendall_tau(ranking_a, ranking_b):
     concordant = 0
     discordant = 0
@@ -193,7 +209,14 @@ write_csv(ROOT / "results/elicitation_accuracy.csv",
           ["Elicitation method", "Top choice correct", "Last choice correct", "Full ranking exact",
            "Mean Kendall tau"], elicitation_rows)
 
-# ------------------------------------------------------------------ 5. les quatre appariements
+#  5. les quatre appariements
+#comparaison de quatre méthodes d'appariement : les indicateurs de comparaisont 
+#feasibility faisabilité, unassigned non affectés, first choice 1er choix,
+#  mean rank rang moyen, total utility utilité totale,
+#  blocking pairs paires bloquantes, 
+# students in blocking pairs étudiants dans une paire bloquante,
+#  worse than oracle pire que l'oracle
+
 direct = {}
 for c in codes:
     direct[c] = list(llm_direct.get(c, []))
@@ -240,15 +263,20 @@ for m in methods:
     header.append(m[0])
 write_csv(ROOT / "results/assignments.csv", header, rows)
 
-# ------------------------------------------------------------------ 6. simulation : erreurs de lecture
+#  6. simulation test de robustesse
+
+# si le LLM se trompe un peu dans l’ordre des préférences,
+#  l’affectation finale se dégrade-t-elle beaucoup ou pas ? 
+
 # ALGORITHME PropagationDesErreurs
 # POUR p allant de 0 à 0,6 par pas de 0,05 FAIRE
 #     REPETER 300 fois
 #         pour chaque étudiant, partir de son vrai classement et échanger chaque paire de
-#         programmes voisins avec la probabilité p
+#         programmes voisins avec la probabilité p(niveau d'erreur)
 #         calculer DA sur ces classements bruités
 #         compter les paires bloquantes (vraies préférences) et les 1ers choix obtenus
 #     faire la moyenne des 300 essais
+
 rng = random.Random(0)
 noise_rows = []
 for step in range(13):
@@ -274,13 +302,14 @@ for step in range(13):
 write_csv(ROOT / "results/elicitation_noise_simulation.csv",
           ["swap_prob", "blocking_pairs", "first_choice", "exact_top"], noise_rows)
 
-# ------------------------------------------------------------------ 7. graphiques
+#  7. graphiques
+
 names, first_pct, n_blocking = [], [], []
 for r in reversed(result_rows):                     # ordre inversé : la 1re méthode en haut
     names.append(r[0])
     first_pct.append(100 * r[3])
     n_blocking.append(r[6])
-colors = ["#d62728", "#ff7f0e", "#1f77b4", "#7f7f7f"]
+colors = ["red", "orange", "blue", "gray"]
 fig, axes = plt.subplots(1, 2, figsize=(11, 4))
 axes[0].barh(names, first_pct, color=colors)
 axes[0].set_xlabel("Students who get their true first choice (%)")
@@ -301,11 +330,11 @@ for r in noise_rows:
     mean_bp.append(r[1])
     mean_first.append(100 * r[2])
 fig, ax1 = plt.subplots(figsize=(7, 4))
-ax1.plot(probs, mean_bp, "o-", color="#c0392b", label="Blocking pairs (left)")
+ax1.plot(probs, mean_bp, "o-", color="red", label="Blocking pairs (left)")
 ax1.set_xlabel("Probability of swapping two adjacent programmes in an elicited ranking")
 ax1.set_ylabel("Blocking pairs w.r.t. true preferences")
 ax2 = ax1.twinx()
-ax2.plot(probs, mean_first, "s-", color="#2471a3", label="Get true 1st choice (right)")
+ax2.plot(probs, mean_first, "s-", color="blue", label="Get true 1st choice (right)")
 ax2.set_ylabel("%")
 lines = ax1.get_lines() + ax2.get_lines()
 labels = []
